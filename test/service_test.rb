@@ -29,6 +29,7 @@ class ServiceTest < Minitest::Spec
 
   class CustomResultService < CivilService::Service
     class Result < CivilService::Result
+      attr_accessor :magic_number
     end
 
     self.result_class = CustomResultService::Result
@@ -36,7 +37,7 @@ class ServiceTest < Minitest::Spec
     private
 
     def inner_call
-      success
+      success magic_number: 42
     end
   end
 
@@ -91,6 +92,7 @@ class ServiceTest < Minitest::Spec
     it 'returns the custom result class' do
       result = service.call
       assert result.is_a?(CustomResultService::Result)
+      assert_equal 42, result.magic_number
     end
   end
 end
