@@ -2,6 +2,8 @@
 
 CivilService is a tiny framework for [service objects in Rails apps](https://hackernoon.com/service-objects-in-ruby-on-rails-and-you-79ca8a1c946e). With CivilService, you can use ActiveModel validations to do pre-flight checks before the service runs, and create your own result object classes to capture the results of complex operations.
 
+CivilService was extracted from [Intercode](https://github.com/neinteractiveliterature/intercode), a web app for convention organizers and participants.
+
 ## Installation
 
 Add this line to your application's Gemfile:
