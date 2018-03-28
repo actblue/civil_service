@@ -1,8 +1,6 @@
 # CivilService
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/civil_service`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+CivilService is a tiny framework for [service objects in Rails apps](https://hackernoon.com/service-objects-in-ruby-on-rails-and-you-79ca8a1c946e). With CivilService, you can use ActiveModel validations to do pre-flight checks before the service runs, and create your own result object classes to capture the results of complex operations.
 
 ## Installation
 
@@ -20,9 +18,60 @@ Or install it yourself as:
 
     $ gem install civil_service
 
-## Usage
+## What CivilService does
 
-TODO: Write usage instructions here
+CivilService::Service is really a pretty tiny class.  It does, however, have some opinions that create a potentially-useful abstraction for app developers:
+
+* When called, services always return a result object that responds to (at least) `#success?`, `#failure?`, and `#errors`.  This lets your code paths that call services be consistent and simple.  (If you want to return more information as a result of running the service, it's easy to define a custom result class for your service.)
+* Services include `ActiveModel::Validations` so they can easily do pre-flight checks.  That means you can call `my_service.valid?` and `my_service.errors` just like you can for a model, and it also means that the service will fail if it's not valid.
+
+## Basic example
+
+Here's a simple service that changes a user's password in a hypothetical Rails app, and sends a
+notification email about it:
+
+```ruby
+class PasswordChangeService < CivilService::Service
+  validate :ensure_valid_password
+
+  attr_reader :user, :new_password
+
+  def initialize(user:, new_password:)
+    @user = user
+    @new_password = new_password
+  end
+
+  private
+
+  def inner_call
+    user.update!(password: new_password)
+    UserMailer.password_changed(user).deliver_later
+    success
+  end
+
+  def ensure_valid
+    return if new_password.length >= 8
+    errors.add(:base, "Passwords must be at least 8 characters long")
+  end
+end
+```
+
+You might call this from a controller action like this:
+
+```ruby
+class UsersController < ApplicationController
+  def change_password
+    service = PasswordChangeService.new(user: current_user, new_password: params[:password])
+    result = service.call
+
+    if result.success?
+      redirect_to root_url, notice: "Your password has been changed."
+    else
+      flash[:alert] = result.errors.full_messages.join(', ')
+    end
+  end
+end
+```
 
 ## Development
 
@@ -32,4 +81,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/civil_service.
+Bug reports and pull requests are welcome on GitHub at https://github.com/neinteractiveliterature/civil_service.

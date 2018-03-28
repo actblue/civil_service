@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["nbudin@patientslikeme.com"]
 
   spec.summary       = %q{A tiny service object framework for Rails apps}
-  spec.description   = %q{civil_service provides a base class for your service objects.  With civil_service, you can use ActiveModel validations to do pre-flight checks before the service runs, and create your own result object classes to capture the results of complex operations.}
+  spec.description   = %q{CivilService provides a base class for your service objects.  With CivilService, you can use ActiveModel validations to do pre-flight checks before the service runs, and create your own result object classes to capture the results of complex operations.}
   spec.homepage      = "https://github.com/neinteractiveliterature/civil_service"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
