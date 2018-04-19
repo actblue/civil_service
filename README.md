@@ -53,7 +53,7 @@ class PasswordChangeService < CivilService::Service
     success
   end
 
-  def ensure_valid
+  def ensure_valid_password
     return if new_password.length >= 8
     errors.add(:base, "Passwords must be at least 8 characters long")
   end
