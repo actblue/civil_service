@@ -26,8 +26,10 @@ Or install it yourself as:
 
 CivilService::Service is really a pretty tiny class.  It does, however, have some opinions that create a potentially-useful abstraction for app developers:
 
-* When called, services always return a result object that responds to (at least) `#success?`, `#failure?`, and `#errors`.  This lets your code paths that call services be consistent and simple.  (If you want to return more information as a result of running the service, it's easy to define a custom result class for your service.)
+* When called, services always return a result object that responds to (at least) `#success?`, `#failure?`, `#errors`, and `#exception`.  This lets your code paths that call services be consistent and simple.  (If you want to return more information as a result of running the service, it's easy to define a custom result class for your service.)
+  * What's the difference between `#errors` and `#exception`?  `#errors` is an instance of `ActiveModel::Errors`, whereas `#exception` is an instance of an exception class (it's only present if an exception was raised inside the service call).  If an exception is raised, the service result will respond true to `#failure?`, false to `#success?`, and the exception's message will be added to `#errors`, so most of the time you can ignore `#exception` - but it's there in case you need to dig into the details.
 * Services include `ActiveModel::Validations` so they can easily do pre-flight checks.  That means you can call `my_service.valid?` and `my_service.errors` just like you can for a model, and it also means that the service will fail if it's not valid.
+* In addition to `#call`, which always returns a result object, services have a `#call!` method, which will raise a `CivilService::ServiceFailure` exception if the service fails, or pass through an exception if one is raised inside the service call.  This might be easier in some workflows; for example, it will cause a rollback if used inside an ActiveRecord transaction block.
 
 ## Basic example
 
