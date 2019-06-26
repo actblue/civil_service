@@ -4,14 +4,17 @@ class ServiceTest < Minitest::Spec
   class MyService < CivilService::Service
     validate :ensure_valid
 
-    def initialize(valid: true, should_fail: false)
+    def initialize(valid: true, should_fail: false, should_raise: false)
       @valid = valid
       @should_fail = should_fail
+      @should_raise = should_raise
     end
 
     private
 
     def inner_call
+      raise 'Raising exception as instructed' if @should_raise
+
       if @should_fail
         errors = ActiveModel::Errors.new(self)
         errors.add(:base, "Told to fail")
@@ -58,6 +61,24 @@ class ServiceTest < Minitest::Spec
 
     it 'raises if called with call!' do
       assert_raises(CivilService::ServiceFailure) do
+        service.call!
+      end
+    end
+  end
+
+  describe 'error' do
+    let(:service) { MyService.new(should_raise: true) }
+
+    it 'returns a failing result object' do
+      result = service.call
+      assert result.is_a?(CivilService::Result)
+      assert result.failure?
+      assert_equal ['Raising exception as instructed'], result.errors.full_messages
+      assert result.exception.message == 'Raising exception as instructed'
+    end
+
+    it 'raises if called with call!' do
+      assert_raises(RuntimeError) do
         service.call!
       end
     end

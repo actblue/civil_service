@@ -1,6 +1,6 @@
 class CivilService::Result
   include ActiveModel::Model
-  attr_accessor :success, :errors
+  attr_accessor :success, :errors, :exception
 
   def self.success(attributes = {})
     new(attributes.merge(success: true))

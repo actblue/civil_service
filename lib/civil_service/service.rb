@@ -17,7 +17,12 @@ class CivilService::Service
       return failure(errors) unless valid?
     end
 
-    inner_call
+    begin
+      inner_call
+    rescue StandardError => exception
+      errors.add :base, exception.message
+      failure(errors, exception: exception)
+    end
   end
 
   def call!
