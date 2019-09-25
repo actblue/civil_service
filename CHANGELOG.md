@@ -1,3 +1,8 @@
+# Version 2.1.0 - September 25, 2019
+
+* `CivilService::Result#errors` now always returns an Errors object even if it hasn't been
+  explicitly set.
+
 # Version 2.0.0 - June 26, 2019
 
 * BREAKING CHANGE: The behavior of `CivilService::Service#call` has changed when exceptions are
