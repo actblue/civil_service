@@ -16,9 +16,9 @@ class ServiceTest < Minitest::Spec
       raise 'Raising exception as instructed' if @should_raise
 
       if @should_fail
-        errors = ActiveModel::Errors.new(self)
-        errors.add(:base, "Told to fail")
-        failure(errors)
+        result = failure(errors)
+        result.errors.add(:base, "Told to fail")
+        result
       else
         success
       end
