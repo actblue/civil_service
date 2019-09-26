@@ -26,6 +26,7 @@ class ServiceTest < Minitest::Spec
 
     def ensure_valid
       return if @valid
+
       errors.add(:valid, "must be true")
     end
   end
@@ -75,6 +76,12 @@ class ServiceTest < Minitest::Spec
       assert result.failure?
       assert_equal ['Raising exception as instructed'], result.errors.full_messages
       assert result.exception.message == 'Raising exception as instructed'
+    end
+
+    it 'raises if called with call_and_raise' do
+      assert_raises(RuntimeError) do
+        service.call_and_raise
+      end
     end
 
     it 'raises if called with call!' do

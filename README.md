@@ -4,7 +4,7 @@
 
 CivilService is a tiny framework for [service objects in Rails apps](https://hackernoon.com/service-objects-in-ruby-on-rails-and-you-79ca8a1c946e). With CivilService, you can use ActiveModel validations to do pre-flight checks before the service runs, and create your own result object classes to capture the results of complex operations.
 
-CivilService was extracted from [Intercode](https://github.com/neinteractiveliterature/intercode), a web app for convention organizers and participants.
+CivilService was extracted from [Intercode](https://github.com/neinteractiveliterature/intercode), a web app for convention organizers and participants.  It is now maintained by ActBlue.
 
 ## Installation
 
@@ -30,6 +30,7 @@ CivilService::Service is really a pretty tiny class.  It does, however, have som
   * What's the difference between `#errors` and `#exception`?  `#errors` is an instance of `ActiveModel::Errors`, whereas `#exception` is an instance of an exception class (it's only present if an exception was raised inside the service call).  If an exception is raised, the service result will respond true to `#failure?`, false to `#success?`, and the exception's message will be added to `#errors`, so most of the time you can ignore `#exception` - but it's there in case you need to dig into the details.
 * Services include `ActiveModel::Validations` so they can easily do pre-flight checks.  That means you can call `my_service.valid?` and `my_service.errors` just like you can for a model, and it also means that the service will fail if it's not valid.
 * In addition to `#call`, which always returns a result object, services have a `#call!` method, which will raise a `CivilService::ServiceFailure` exception if the service fails, or pass through an exception if one is raised inside the service call.  This might be easier in some workflows; for example, it will cause a rollback if used inside an ActiveRecord transaction block.
+* Finally, there's a third variant: `#call_and_raise`, which will re-raise any exceptions that occurred during the service execution, but will return a regular result object on failure.
 
 ## Basic example
 
@@ -87,4 +88,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/neinteractiveliterature/civil_service.
+Bug reports and pull requests are welcome on GitHub at https://github.com/actblue/civil_service.

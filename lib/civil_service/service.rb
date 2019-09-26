@@ -25,6 +25,15 @@ class CivilService::Service
     end
   end
 
+  def call_and_raise
+    result = call
+    if result.exception
+      raise result.exception, result.exception.message, result.exception.backtrace
+    end
+
+    result
+  end
+
   def call!
     unless self.class.validate_manually
       raise CivilService::ServiceFailure.new(self, failure(errors)) unless valid?

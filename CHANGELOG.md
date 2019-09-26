@@ -1,3 +1,11 @@
+# Version 2.2.0 - September 26, 2019
+
+* Services now have a new `#call_and_raise` method, which will return a result object on failure
+  but will raise exceptions that are thrown inside the service call (effectively, the behavior of
+  `#call` in CivilService 1.0.0).
+* Added a new mixin called `CivilService::MultiResultService`, which allows creating services whose
+  results are composed of multiple results that are aggregated together.
+
 # Version 2.1.0 - September 25, 2019
 
 * `CivilService::Result#errors` now always returns an Errors object even if it hasn't been
