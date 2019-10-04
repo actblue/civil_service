@@ -20,7 +20,7 @@ module CivilService::MultiResultService
     end
 
     def exception
-      (results || []).compact.map(&:exception).compact.first
+      super || (results || []).compact.map(&:exception).compact.first
     end
   end
 

@@ -1,3 +1,8 @@
+# Version 2.2.1 - October 4, 2019
+
+* `CivilService::MultiResultService::MultiResult#exception` now checks the underlying exception on
+  the root result object, in case the service threw an exception.
+
 # Version 2.2.0 - September 26, 2019
 
 * Services now have a new `#call_and_raise` method, which will return a result object on failure
