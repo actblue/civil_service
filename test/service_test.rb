@@ -1,6 +1,8 @@
 require "test_helper"
 
 class ServiceTest < Minitest::Spec
+  class CustomException < RuntimeError ; end
+
   class MyService < CivilService::Service
     validate :ensure_valid
 
@@ -13,7 +15,7 @@ class ServiceTest < Minitest::Spec
     private
 
     def inner_call
-      raise 'Raising exception as instructed' if @should_raise
+      raise CustomException, 'Raising exception as instructed' if @should_raise
 
       if @should_fail
         result = failure(errors)
@@ -79,13 +81,13 @@ class ServiceTest < Minitest::Spec
     end
 
     it 'raises if called with call_and_raise' do
-      assert_raises(RuntimeError) do
+      assert_raises(CustomException) do
         service.call_and_raise
       end
     end
 
     it 'raises if called with call!' do
-      assert_raises(RuntimeError) do
+      assert_raises(CustomException) do
         service.call!
       end
     end

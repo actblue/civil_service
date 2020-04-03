@@ -1,3 +1,8 @@
+# Version 2.3.0 - April 3, 2020
+
+* `#call!` now raises the underlying exception if the service threw an exception,
+  rather than hiding it inside a `CivilService::ServiceFailure`.
+
 # Version 2.2.1 - October 4, 2019
 
 * `CivilService::MultiResultService::MultiResult#exception` now checks the underlying exception on

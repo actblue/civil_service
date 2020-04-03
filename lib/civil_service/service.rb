@@ -39,7 +39,7 @@ class CivilService::Service
       raise CivilService::ServiceFailure.new(self, failure(errors)) unless valid?
     end
 
-    result = inner_call
+    result = call_and_raise
     raise CivilService::ServiceFailure.new(self, result) if result.failure?
     result
   end
