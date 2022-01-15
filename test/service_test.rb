@@ -114,6 +114,21 @@ class ServiceTest < Minitest::Spec
         MyService.validate_manually = false
       end
     end
+
+    it 'skips validations if #call(validate: false) is called' do
+      result = service.call(validate: false)
+      assert result.success?
+    end
+
+    it 'skips validations if #call_and_raise(validate: false) is called' do
+      result = service.call_and_raise(validate: false)
+      assert result.success?
+    end
+
+    it 'skips validations if #call!(validate: false) is called' do
+      result = service.call!(validate: false)
+      assert result.success?
+    end
   end
 
   describe 'custom result classes' do
