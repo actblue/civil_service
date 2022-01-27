@@ -12,8 +12,8 @@ class CivilService::Service
     end
   end
 
-  def call
-    unless self.class.validate_manually
+  def call(validate: true)
+    if validate && !self.class.validate_manually
       return failure(errors) unless valid?
     end
 
@@ -25,8 +25,8 @@ class CivilService::Service
     end
   end
 
-  def call_and_raise
-    result = call
+  def call_and_raise(validate: true)
+    result = call(validate: validate)
     if result.exception
       raise result.exception, result.exception.message, result.exception.backtrace
     end
@@ -34,12 +34,12 @@ class CivilService::Service
     result
   end
 
-  def call!
-    unless self.class.validate_manually
+  def call!(validate: true)
+    if validate && !self.class.validate_manually
       raise CivilService::ServiceFailure.new(self, failure(errors)) unless valid?
     end
 
-    result = call_and_raise
+    result = call_and_raise(validate: false) # we already just did the validation step if needed
     raise CivilService::ServiceFailure.new(self, result) if result.failure?
     result
   end
