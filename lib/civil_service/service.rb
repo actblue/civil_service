@@ -8,7 +8,7 @@ class CivilService::Service
     attr_writer :result_class
 
     def result_class
-      @result_class || CivilService::Result
+      @result_class ||= CivilService::Result
     end
   end
 
@@ -45,7 +45,7 @@ class CivilService::Service
   end
 
   def logger
-    @logger || Rails.logger
+    @logger ||= Rails.logger
   end
 
   private
